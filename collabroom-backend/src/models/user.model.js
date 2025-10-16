@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const user = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -23,6 +24,9 @@ const user = new mongoose.Schema({
         ref: 'Task',
       },
     ],
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
+  verificationExpires: Date,
   },
   { timestamps: true }
 );
@@ -32,13 +36,20 @@ user.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  const salt = bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
 user.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+}
+
+user.methods.generateVerificationToken = function() {
+    const token = crypto.randomBytes(20).toString('hex');
+    this.verificationToken = token;
+    this.verificationExpires = Date.now() + 3600000;
+    return token;
 }
 
 const User = mongoose.model("User", user);
