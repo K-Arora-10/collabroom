@@ -1,9 +1,12 @@
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
 
 
 export const LogoutButton = () => {
+    const {setUser}= useAuth();
     const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
@@ -13,7 +16,9 @@ export const LogoutButton = () => {
         method: "POST",
         credentials: "include",
       });
+      console.log("Logout response:", res);
         if (res.ok) {  
+            setUser(null);
             navigate("/login");
         }
     } catch (err) {

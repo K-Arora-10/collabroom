@@ -9,7 +9,7 @@ router.get("/verify/:token", verifyEmail);
 router.post("/login",loginUser);
 router.get("/refresh", refreshToken);
 router.post("/logout",verifyToken,logoutUser);
-router.get("/protected", verifyToken,protectedRoute);
+router.get("/protected",verifyToken,protectedRoute);
 
 
 export default router;

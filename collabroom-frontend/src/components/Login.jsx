@@ -3,10 +3,13 @@ import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
+import { useAuth } from "../context/AuthContext";
+
 
 export default function LoginPage() {
 
   const navigate = useNavigate();
+  const {setUser}= useAuth();
 
     
   const [email, setEmail] = useState('');
@@ -35,10 +38,15 @@ export default function LoginPage() {
             toast.error(data.message || 'Login failed');
             return;
         }
+        console.log("Login successful:", data);
         toast.success('Login successful!');
-        const profileRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/protected`, { credentials: "include" });
-        if (profileRes.ok) {
-          console.log("Navigating to dashboard",profileRes);
+        const checkres = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/protected`, { 
+            credentials: "include"
+        });
+        if (checkres.ok) {
+          const data = await checkres.json();
+          console.log(data);
+          setUser(data);
           navigate("/dashboard");
         }
         
