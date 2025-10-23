@@ -13,6 +13,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<PublicRoute><LoginPage/></PublicRoute>}/>
         <Route path="/register" element={<PublicRoute><RegisterPage/></PublicRoute>}/>
         <Route path="/verify/:token" element={<PublicRoute><VerifyEmailPage /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
