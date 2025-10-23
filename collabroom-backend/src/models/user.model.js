@@ -27,6 +27,7 @@ const user = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verificationToken: String,
   verificationExpires: Date,
+  refreshToken: { type: String, default: null },
   },
   { timestamps: true }
 );

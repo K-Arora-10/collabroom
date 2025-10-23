@@ -29,7 +29,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(import.meta.env.VITE_BACKEND_URL)
+    // console.log(import.meta.env.VITE_BACKEND_URL)
 
     if (!Object.values(formData).every((field) => field)) {
       toast.error('Please fill all fields');
