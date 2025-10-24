@@ -2,6 +2,7 @@ import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { fetchWithAuth } from "../api/fetchClient";
 
 
 
@@ -12,7 +13,7 @@ export const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/logout`, { 
+      const res = await fetchWithAuth(`/api/users/logout`, { 
         method: "POST",
         credentials: "include",
       });

@@ -1,33 +1,12 @@
 import { useEffect, useState } from "react";
 import { CheckCircle, Clock, MessageSquare, Users } from "lucide-react";
+import { fetchWithAuth } from "../api/fetchClient";
+import { useNavigate } from "react-router-dom";
 
 
-const RoomsList = () => {
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/rooms/displayRooms`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-        const data = await res.json();
-        setRooms(data.rooms);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRooms();
-  }, []); 
+const RoomsList = ({rooms,loading,error}) => {
+ 
+  const navigate = useNavigate();
 
   if (loading) return <p>Loading rooms...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -39,7 +18,7 @@ const RoomsList = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {rooms.map(room => (
-                <div key={room._id} className="rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" style={{ backgroundColor: '#FFFFFF' }}>
+                <div onClick={() => navigate(`/room/${room._id}`)} key={room._id} className="rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" style={{ backgroundColor: '#FFFFFF' }}>
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-lg font-bold mb-1" style={{ color: '#263238' }}>{room.name}</h3>

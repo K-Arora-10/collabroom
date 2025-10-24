@@ -1,21 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Users, CheckCircle, Clock, AlertCircle, LogOut, Bell, MessageSquare, Search } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
 import { LogoutButton } from './LogoutButton';
 import CreateRoomModal from './CreateRoomModal';
 import { toast, ToastContainer } from 'react-toastify';
 import RoomsList from './RoomList';
+import { fetchWithAuth } from '../api/fetchClient';
 
 export default function Dashboard() {
   const {user,loading} = useAuth();
   const [activeTab, setActiveTab] = useState('rooms');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
+  const [rooms, setRooms] = useState([]);
+  const [looading, setLooading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const res = await fetchWithAuth(`/api/rooms/displayRooms`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+        const data = await res.json();
+        setRooms(data.rooms);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLooading(false);
+      }
+    };
+
+    fetchRooms();
+  }, [isCreateModalOpen]); 
+
 
   const handleCreateRoom = async ({ roomName, description }) => {
   
   try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/rooms/create`, {
+    const res = await fetchWithAuth(`/api/rooms/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -40,11 +67,7 @@ export default function Dashboard() {
   setIsCreateModalOpen(false);
 };
 
-  const [rooms] = useState([
-    { id: 1, name: 'Hackathon Project', members: 5, tasks: { todo: 8, inProgress: 3, done: 12 }, role: 'Leader' },
-    { id: 2, name: 'Final Year Project', members: 4, tasks: { todo: 5, inProgress: 7, done: 20 }, role: 'Member' },
-    { id: 3, name: 'Club Event Planning', members: 8, tasks: { todo: 12, inProgress: 2, done: 5 }, role: 'Leader' }
-  ]);
+  
 
   const [notifications] = useState([
     { id: 1, room: 'Hackathon Project', message: 'New task assigned: Design mockups', time: '5m ago', unread: true },
@@ -127,13 +150,17 @@ export default function Dashboard() {
               </div>
               <button onClick={() => setIsCreateModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
                 <Plus className="w-5 h-5" />
+                <span>Join Room</span>
+              </button>
+              <button onClick={() => setIsCreateModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
+                <Plus className="w-5 h-5" />
                 <span>Create Room</span>
               </button>
             </div>
 
             {/* ////////////////////////////////////////////////////////////////////// */}
 
-            <RoomsList/>
+            <RoomsList rooms={rooms} loading={looading} error={error}/>
           </>
         )}
 
@@ -164,7 +191,7 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-      <CreateRoomModal 
+      <CreateRoomModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateRoom}
