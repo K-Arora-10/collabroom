@@ -23,7 +23,7 @@ const RoomsList = ({rooms,loading,error}) => {
                     <div>
                       <h3 className="text-lg font-bold mb-1" style={{ color: '#263238' }}>{room.name}</h3>
                       <span className="text-xs px-2 py-1 rounded font-medium" style={{ backgroundColor: room.role === 'Leader' ? '#59438E' : '#3CB371', color: '#FFFFFF' }}>
-                        {room.leader.name}
+                        Leader - {room.leader.name}
                       </span>
                     </div>
                     <button className="p-2 rounded-lg hover:bg-opacity-10 transition-colors" style={{ backgroundColor: '#FAFAFA' }}>
@@ -32,7 +32,6 @@ const RoomsList = ({rooms,loading,error}) => {
                   </div>
 
                   <div className="flex items-center space-x-2 mb-4">
-                    <Users className="w-4 h-4" style={{ color: '#263238', opacity: 0.6 }} />
                     <span className="text-sm" style={{ color: '#263238', opacity: 0.6 }}>{room.description}</span>
                   </div>
 

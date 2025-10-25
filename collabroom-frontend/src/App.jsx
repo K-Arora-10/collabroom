@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import PublicRoute from './components/PublicRoute'
 import RoomPage from './components/RoomPage'
+import JoinRoomPage from './components/JoinRoom'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/room/:id" element={<ProtectedRoute><RoomPage /></ProtectedRoute>} />
+        <Route path="/join/:inviteCode" element={<ProtectedRoute><JoinRoomPage /></ProtectedRoute>} />
       </Routes>
     </>
   )

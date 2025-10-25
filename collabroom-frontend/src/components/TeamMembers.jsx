@@ -7,7 +7,7 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [inviteCode] = useState(inviteCodeprop);
-  const [inviteLink] = useState(`https://collabroom.com/join/${inviteCode}`);
+  const [inviteLink] = useState(`${import.meta.env.VITE_FRONTEND_URL}/join/${inviteCode}`);
   const [members, setMembers] = useState(membersProp || []);
   const [isLeader,setIsLeader]= useState(isLeaderprop);
   const [leader,setLeader]= useState(leaderprop);

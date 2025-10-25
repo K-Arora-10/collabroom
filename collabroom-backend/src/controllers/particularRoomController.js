@@ -27,3 +27,18 @@ export const getRoomInfo = async (req, res) => {
 //         res.status(500).json({ message: error.message });
 //     }
 // };
+
+
+export const roomInfoByInviteCode = async (req, res) => {
+  const userId = req.user._id;
+  const { inviteCode } = req.params;
+  try {
+    const room = await Room.findOne({ inviteCode }).populate('members leader', '_id name email');
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+    res.status(200).json({room });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
