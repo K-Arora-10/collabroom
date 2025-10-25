@@ -9,6 +9,7 @@ export default function RoomPage() {
   const [activeSection, setActiveSection] = useState('tasks');
   const [newMessage, setNewMessage] = useState('');
   const [isLeader, setIsLeader] = useState(false);
+  const [leader,setLeader] = useState(null);
   const [inviteCode, setInviteCode] = useState('');
   const [members, setMembers] = useState([]);
 
@@ -28,6 +29,7 @@ export default function RoomPage() {
         const data = await res.json();
         setRoom(data.room);
         setIsLeader(data.isLeader);
+        setLeader(data.room.leader);
         setInviteCode(data.room.inviteCode);
         setMembers(data.room.members);
         console.log("Fetched room data:", data);
@@ -212,7 +214,7 @@ export default function RoomPage() {
         )}
 
         {activeSection === 'members' && (
-          <TeamMembers roomId={id} isLeaderprop={isLeader} membersProp={members} inviteCodeprop={inviteCode}/>
+          <TeamMembers roomId={id} isLeaderprop={isLeader} membersProp={members} inviteCodeprop={inviteCode} leaderprop={leader}/>
         )}
 
         {activeSection === 'chat' && (

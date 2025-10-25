@@ -3,13 +3,14 @@ import { UserPlus, Copy, Check, Mail, X, Crown, Trash2 } from 'lucide-react';
 import { fetchWithAuth } from '../api/fetchClient';
 
 
-export default function MembersSection({ roomId,isLeaderprop,membersProp, inviteCodeprop}) {
+export default function MembersSection({ roomId,isLeaderprop,membersProp, inviteCodeprop, leaderprop}) {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const [inviteCode] = useState(inviteCodeprop);
   const [inviteLink] = useState(`https://collabroom.com/join/${inviteCode}`);
   const [members, setMembers] = useState(membersProp || []);
   const [isLeader,setIsLeader]= useState(isLeaderprop);
+  const [leader,setLeader]= useState(leaderprop);
 
 
 
@@ -74,7 +75,7 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
                     <h3 className="font-semibold truncate" style={{ color: '#263238' }}>
                       {member.name}
                     </h3>
-                    {member.role === 'Leader' && (
+                    {member.email === leader.email && (
                       <Crown className="w-4 h-4 flex-shrink-0" style={{ color: '#D39B4B' }} />
                     )}
                   </div>

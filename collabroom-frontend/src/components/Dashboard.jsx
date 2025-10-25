@@ -6,11 +6,13 @@ import CreateRoomModal from './CreateRoomModal';
 import { toast, ToastContainer } from 'react-toastify';
 import RoomsList from './RoomList';
 import { fetchWithAuth } from '../api/fetchClient';
+import JoinRoomModal from './JoinRoomModal';
 
 export default function Dashboard() {
   const {user,loading} = useAuth();
   const [activeTab, setActiveTab] = useState('rooms');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   const [rooms, setRooms] = useState([]);
   const [looading, setLooading] = useState(true);
@@ -36,7 +38,30 @@ export default function Dashboard() {
     };
 
     fetchRooms();
-  }, [isCreateModalOpen]); 
+  }, [isCreateModalOpen,isJoinModalOpen]); 
+
+
+  const handleJoinRoom = async (inviteCode) => {
+    try {
+      const res = await fetchWithAuth(`/api/rooms/join/${inviteCode}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        toast.error(errorData.message || 'Failed to join room');
+        return;
+      }
+      const data = await res.json();
+      toast.success('Joined room successfully!');
+      console.log("Join room response:", data);
+      setRooms(prevRooms => [...prevRooms, data.room]);
+    } catch (err) {
+      toast.error(err.message);
+    }
+    setIsJoinModalOpen(false);
+  };
 
 
   const handleCreateRoom = async ({ roomName, description }) => {
@@ -148,7 +173,7 @@ export default function Dashboard() {
                   style={{ borderColor: '#E5E7EB', color: '#263238', backgroundColor: '#FFFFFF' }}
                 />
               </div>
-              <button onClick={() => setIsCreateModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
+              <button onClick={() => setIsJoinModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
                 <Plus className="w-5 h-5" />
                 <span>Join Room</span>
               </button>
@@ -195,6 +220,11 @@ export default function Dashboard() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateRoom}
+      />
+      <JoinRoomModal
+        isOpen={isJoinModalOpen}
+        onClose={() => setIsJoinModalOpen(false)}
+        onSubmitJoin={handleJoinRoom}
       />
     </div>
   );
