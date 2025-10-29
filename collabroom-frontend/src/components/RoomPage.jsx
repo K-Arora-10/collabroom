@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Plus, MoreVertical, Send, Paperclip, CheckCircle, Clock, Circle, UserPlus, Copy, Check, Mail, X, Crown, Trash2 } from 'lucide-react';
 import TeamMembers from './TeamMembers';
+import TaskSection from './TaskSection';
 import { useParams } from 'react-router-dom';
 import { fetchWithAuth } from '../api/fetchClient';
 
@@ -157,60 +158,7 @@ export default function RoomPage() {
         </div>
 
         {activeSection === 'tasks' && (
-          <div>
-            <div className="flex justify-end mb-4">
-              <button className="px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
-                <Plus className="w-5 h-5" />
-                <span>Create Task</span>
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <Circle className="w-5 h-5" style={{ color: '#263238', opacity: 0.4 }} />
-                  <h3 className="font-semibold" style={{ color: '#263238' }}>To Do</h3>
-                  <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#FAFAFA', color: '#263238' }}>
-                    {tasks.todo.length}
-                  </span>
-                </div>
-                <div>
-                  {tasks.todo.map(task => (
-                    <TaskCard key={task.id} task={task} />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <Clock className="w-5 h-5" style={{ color: '#D39B4B' }} />
-                  <h3 className="font-semibold" style={{ color: '#263238' }}>In Progress</h3>
-                  <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#D39B4B', color: '#FFFFFF' }}>
-                    {tasks.inProgress.length}
-                  </span>
-                </div>
-                <div>
-                  {tasks.inProgress.map(task => (
-                    <TaskCard key={task.id} task={task} />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <CheckCircle className="w-5 h-5" style={{ color: '#3CB371' }} />
-                  <h3 className="font-semibold" style={{ color: '#263238' }}>Done</h3>
-                  <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#3CB371', color: '#FFFFFF' }}>
-                    {tasks.done.length}
-                  </span>
-                </div>
-                <div>
-                  {tasks.done.map(task => (
-                    <TaskCard key={task.id} task={task} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <TaskSection isLeader={isLeader} members={members} roomId={id}/>
         )}
 
         {activeSection === 'members' && (

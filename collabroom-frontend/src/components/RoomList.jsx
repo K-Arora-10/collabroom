@@ -22,7 +22,7 @@ const RoomsList = ({rooms,loading,error}) => {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-lg font-bold mb-1" style={{ color: '#263238' }}>{room.name}</h3>
-                      <span className="text-xs px-2 py-1 rounded font-medium" style={{ backgroundColor: room.role === 'Leader' ? '#59438E' : '#3CB371', color: '#FFFFFF' }}>
+                      <span className="text-xs px-2 py-1 rounded font-medium" style={{ backgroundColor: room.role === 'Leader' ? '#59438E' : '#59438E', color: '#FFFFFF' }}>
                         Leader - {room.leader.name}
                       </span>
                     </div>

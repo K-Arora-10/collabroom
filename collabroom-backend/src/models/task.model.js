@@ -7,12 +7,16 @@ const task = new mongoose.Schema({
     assignedTo: {   
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },  
     room: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room',
+        required: true,
     },
     deadline: { type: Date}
     }, 
     {timestamps: true}
 );
+
+export default mongoose.model("Task", task);

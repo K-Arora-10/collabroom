@@ -162,32 +162,40 @@ export default function Dashboard() {
         </div>
 
         {activeTab === 'rooms' && (
-          <>
-            <div className="flex justify-between items-center mb-6">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#263238', opacity: 0.4 }} />
-                <input
-                  type="text"
-                  placeholder="Search rooms..."
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border-2 focus:outline-none transition-colors"
-                  style={{ borderColor: '#E5E7EB', color: '#263238', backgroundColor: '#FFFFFF' }}
-                />
-              </div>
-              <button onClick={() => setIsJoinModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
+        <>
+          <div className="flex justify-between items-center mb-6">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#263238', opacity: 0.4 }} />
+              <input
+                type="text"
+                placeholder="Search rooms..."
+                className="w-full pl-10 pr-4 py-2 rounded-lg border-2 focus:outline-none transition-colors"
+                style={{ borderColor: '#E5E7EB', color: '#263238', backgroundColor: '#FFFFFF' }}
+              />
+            </div>
+            <div className="flex items-center space-x-3 ml-4">
+              <button 
+                onClick={() => setIsJoinModalOpen(true)} 
+                className="px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" 
+                style={{ backgroundColor: '#59438E' }}
+              >
                 <Plus className="w-5 h-5" />
                 <span>Join Room</span>
               </button>
-              <button onClick={() => setIsCreateModalOpen(true)} className="ml-4 px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" style={{ backgroundColor: '#59438E' }}>
+              <button 
+                onClick={() => setIsCreateModalOpen(true)} 
+                className="px-4 py-2 rounded-lg font-semibold text-white flex items-center space-x-2 hover:opacity-90 transition-all" 
+                style={{ backgroundColor: '#59438E' }}
+              >
                 <Plus className="w-5 h-5" />
                 <span>Create Room</span>
               </button>
             </div>
+          </div>
 
-            {/* ////////////////////////////////////////////////////////////////////// */}
-
-            <RoomsList rooms={rooms} loading={looading} error={error}/>
-          </>
-        )}
+          <RoomsList rooms={rooms} loading={looading} error={error}/>
+        </>
+      )}
 
         {activeTab === 'notifications' && (
           <div className="space-y-3">
