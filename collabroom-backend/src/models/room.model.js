@@ -18,6 +18,10 @@ const room = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task',
     }],
+    chat:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chat',
+    }],
     inviteCode: { type: String, unique: true },
   },
   { timestamps: true }

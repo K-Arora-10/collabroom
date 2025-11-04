@@ -4,11 +4,12 @@ import TeamMembers from './TeamMembers';
 import TaskSection from './TaskSection';
 import { useParams } from 'react-router-dom';
 import { fetchWithAuth } from '../api/fetchClient';
+import ChatSection from './ChatSection';
 
 
 export default function RoomPage() {
   const [activeSection, setActiveSection] = useState('tasks');
-  const [newMessage, setNewMessage] = useState('');
+  
   const [isLeader, setIsLeader] = useState(false);
   const [leader,setLeader] = useState(null);
   const [inviteCode, setInviteCode] = useState('');
@@ -45,37 +46,16 @@ export default function RoomPage() {
   
   
 
+  
 
-  const [tasks] = useState({
-    todo: [
-      { id: 1, title: 'Design UI Mockups', assignee: 'Daksh Jain', priority: 'high' },
-      { id: 2, title: 'Setup Database Schema', assignee: 'Jatin Kalra', priority: 'medium' },
-      { id: 3, title: 'Write API Documentation', assignee: 'Manavjot Singh', priority: 'low' }
-    ],
-    inProgress: [
-      { id: 4, title: 'Implement Authentication', assignee: 'Krish Arora', priority: 'high' },
-      { id: 5, title: 'Design Landing Page', assignee: 'Daksh Jain', priority: 'medium' }
-    ],
-    done: [
-      { id: 6, title: 'Project Setup', assignee: 'Krish Arora', priority: 'high' },
-      { id: 7, title: 'Requirements Gathering', assignee: 'Manavjot Singh', priority: 'medium' }
-    ]
-  });
-
-  const [messages] = useState([
-    { id: 1, sender: 'Daksh Jain', message: 'Hey team! Just finished the UI mockups', time: '10:30 AM', initials: 'DJ' },
-    { id: 2, sender: 'Krish Arora', message: 'Great work! Can you share them?', time: '10:32 AM', initials: 'KA' },
-    { id: 3, sender: 'Jatin Kalra', message: 'Database schema is almost ready', time: '11:15 AM', initials: 'JK' }
-  ]);
-
-  const getPriorityColor = (priority) => {
-    switch(priority) {
-      case 'high': return '#ef4444';
-      case 'medium': return '#D39B4B';
-      case 'low': return '#3CB371';
-      default: return '#263238';
-    }
-  };
+  // const getPriorityColor = (priority) => {
+  //   switch(priority) {
+  //     case 'high': return '#ef4444';
+  //     case 'medium': return '#D39B4B';
+  //     case 'low': return '#3CB371';
+  //     default: return '#263238';
+  //   }
+  // };
 
   const TaskCard = ({ task }) => (
     <div className="rounded-lg p-4 mb-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: '#FFFFFF' }}>
@@ -166,48 +146,7 @@ export default function RoomPage() {
         )}
 
         {activeSection === 'chat' && (
-          <div className="rounded-xl shadow-sm overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-            <div className="h-96 overflow-y-auto p-6 space-y-4" style={{ backgroundColor: '#FAFAFA' }}>
-              {messages.map(msg => (
-                <div key={msg.id} className="flex items-start space-x-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-xs flex-shrink-0" style={{ backgroundColor: '#59438E', color: '#FFFFFF' }}>
-                    {msg.initials}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-baseline space-x-2 mb-1">
-                      <span className="text-sm font-semibold" style={{ color: '#263238' }}>{msg.sender}</span>
-                      <span className="text-xs" style={{ color: '#263238', opacity: 0.5 }}>{msg.time}</span>
-                    </div>
-                    <p className="text-sm rounded-lg p-3" style={{ backgroundColor: '#FFFFFF', color: '#263238' }}>
-                      {msg.message}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="p-4 border-t" style={{ borderColor: '#E5E7EB' }}>
-              <div className="flex items-center space-x-2">
-                <button className="p-2 rounded-lg hover:bg-opacity-10 transition-colors" style={{ backgroundColor: '#FAFAFA' }}>
-                  <Paperclip className="w-5 h-5" style={{ color: '#263238' }} />
-                </button>
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 px-4 py-2 rounded-lg border-2 focus:outline-none transition-colors"
-                  style={{ borderColor: '#E5E7EB', color: '#263238' }}
-                />
-                <button 
-                  className="p-2 rounded-lg transition-all"
-                  style={{ backgroundColor: newMessage.trim() ? '#59438E' : '#E5E7EB' }}
-                  disabled={!newMessage.trim()}
-                >
-                  <Send className="w-5 h-5" style={{ color: '#FFFFFF' }} />
-                </button>
-              </div>
-            </div>
-          </div>
+          <ChatSection roomId={id} prevChat={room.chat}/>
         )}
       </div>
     </div>

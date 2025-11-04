@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -31,4 +32,5 @@ app.get("/",(req,res)=>{
 app.use('/api/users', userRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use('/api/chat', chatRoutes);
 
