@@ -89,13 +89,12 @@ export const refreshToken = async (req, res) => {
 
     const newAccessToken = generateAccessToken(user);
 
-    res
-      .cookie("access_token", newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV,
-        sameSite: "Strict",
-        maxAge: 15 * 60 * 1000,
-      })
+    res.cookie("access_token", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      maxAge: 15 * 60 * 1000,
+    })
       .json({ message: "Token refreshed" });
   } catch {
     return res.status(403).json({ message: "Refresh failed" });
