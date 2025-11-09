@@ -3,7 +3,7 @@ import Room from "../models/room.model.js";
 import User from "../models/user.model.js";
 
 export const sendMessage = async (req, res) => {
-  const { message, time } = req.body;
+  const { message, time, socketId } = req.body;
     const  sender  = req.user._id;
     console.log("Sender ID:", req.user._id);
   const roomId = req.params.roomId;
@@ -31,6 +31,15 @@ export const sendMessage = async (req, res) => {
       room.chat.push(newChat._id);
       await room.save();
     }
+
+    const io = req.app.get("io");
+    console.log("Emitting message to room:", roomId, { message, time, sender: { name: senderUser.name } });
+    io.to(roomId).except(socketId).emit("receiveMessage", {
+      roomId,
+      message,
+      time,
+      sender: { name: req.user.name }
+    });
 
     res.status(201).json({ message: "Message sent successfully", chat: newChat });
   } catch (error) {

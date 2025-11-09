@@ -1,14 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { fetchWithAuth } from "../api/fetchClient";
+import { socket } from "../socket.jsx";
 
 const ChatSection = ({ roomId, prevChat }) => {
   const [messages, setMessages] = useState(prevChat || []);
   const [newMessage, setNewMessage] = useState("");
   const endOfMessagesRef = useRef(null);
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-  
+  useEffect(() => {
+    if (!roomId) return;
+
+    socket.emit("joinRoom", roomId);
+
+    const handleReceiveMessage = (msg) => {
+      console.log("Received message via socket:", msg);
+      setMessages((prev) => [...prev, msg]);
+    };
+
+    socket.on("receiveMessage", handleReceiveMessage);
+
+    return () => {
+      socket.off("receiveMessage", handleReceiveMessage);
+      socket.emit("leaveRoom", roomId);
+    };
+  }, [roomId]);
 
   useEffect(() => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -21,41 +37,35 @@ const ChatSection = ({ roomId, prevChat }) => {
       roomId,
       message: newMessage.trim(),
       time: new Date().toISOString(),
+      socketId: socket.id,
     };
 
     setMessages((prev) => [
       ...prev,
-      {
-        ...msgData,
-        sender: { name: "You" },
-      },
+      { ...msgData, sender: { name: "You" } }
     ]);
+
     setNewMessage("");
 
     try {
-      const res = await fetchWithAuth(`/api/chat/send/${roomId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(msgData),
-      });
-      if (!res.ok) {
-        console.error(await res.json());
-      }
-      console.log("Message sent successfully");
+      await fetchWithAuth(`/api/chat/send/${roomId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(msgData),
+    });
     } catch (err) {
-      console.error("Error sending message:", err);
-    }
-  };
+      console.error("Failed to send message:", err);
+    } 
+
+};
 
   return (
     <div className="rounded-xl shadow-sm overflow-hidden" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="h-96 overflow-y-auto p-6 space-y-4" style={{ backgroundColor: "#FAFAFA" }}>
         {messages.map((msg, index) => (
           <div key={index} className="flex items-start space-x-3">
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-xs flex-shrink-0"
-              style={{ backgroundColor: "#59438E", color: "#FFFFFF" }}
-            >
+            <div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-xs flex-shrink-0"
+              style={{ backgroundColor: "#59438E", color: "#FFFFFF" }}>
               {msg.sender?.name ? msg.sender.name[0].toUpperCase() : "?"}
             </div>
             <div className="flex-1">
@@ -64,10 +74,7 @@ const ChatSection = ({ roomId, prevChat }) => {
                   {msg.sender?.name || "Unknown"}
                 </span>
                 <span className="text-xs" style={{ color: "#263238", opacity: 0.5 }}>
-                  {new Date(msg.time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {new Date(msg.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
               <p className="text-sm rounded-lg p-3" style={{ backgroundColor: "#FFFFFF", color: "#263238" }}>
@@ -82,9 +89,7 @@ const ChatSection = ({ roomId, prevChat }) => {
       <div className="p-4 border-t" style={{ borderColor: "#E5E7EB" }}>
         <div className="flex items-center space-x-2">
           <input
-            onKeyDown={(e) => {
-              if (e.key === "Enter") addNewMessage();
-            }}
+            onKeyDown={(e) => e.key === "Enter" && addNewMessage()}
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
@@ -95,9 +100,7 @@ const ChatSection = ({ roomId, prevChat }) => {
           <button
             onClick={addNewMessage}
             className="p-2 rounded-lg transition-all"
-            style={{
-              backgroundColor: newMessage.trim() ? "#59438E" : "#E5E7EB",
-            }}
+            style={{ backgroundColor: newMessage.trim() ? "#59438E" : "#E5E7EB" }}
             disabled={!newMessage.trim()}
           >
             <Send className="w-5 h-5" style={{ color: "#FFFFFF" }} />
