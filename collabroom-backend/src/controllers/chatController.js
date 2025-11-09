@@ -33,12 +33,12 @@ export const sendMessage = async (req, res) => {
     }
 
     const io = req.app.get("io");
-    console.log("Emitting message to room:", roomId, { message, time, sender: { name: senderUser.name } });
+    // console.log("Emitting message to room:", roomId, { message, time, sender: { name: senderUser.name, email:  senderUser.email } });
     io.to(roomId).except(socketId).emit("receiveMessage", {
       roomId,
       message,
       time,
-      sender: { name: req.user.name }
+      sender: { name: req.user.name, email: req.user.email },
     });
 
     res.status(201).json({ message: "Message sent successfully", chat: newChat });
