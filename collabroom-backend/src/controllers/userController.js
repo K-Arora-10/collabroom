@@ -25,6 +25,8 @@ export const registerUser = async (req, res) => {
       <p>This link will expire in 1 hour.</p>
     `;
 
+    console.log("Sending verification email to:", email);
+
     await sendEmail({
       to: email,
       subject: "Verify your email - CollabRoom",
