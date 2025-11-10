@@ -92,7 +92,7 @@ export const refreshToken = async (req, res) => {
     res.cookie("access_token", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", 
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      sameSite: "None",
       maxAge: 15 * 60 * 1000,
     })
       .json({ message: "Token refreshed" });
