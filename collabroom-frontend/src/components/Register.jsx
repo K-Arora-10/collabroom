@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, Check } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 
 export default function RegisterPage() {
@@ -166,9 +167,12 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm mt-4" style={{ color: '#7A8A99' }}>
             Already have an account?{' '}
-            <span className="font-semibold cursor-pointer hover:underline" style={{ color: '#3CB371' }}>
-              Sign in
-            </span>
+            <Link to='/login'>
+              <span className="font-semibold cursor-pointer hover:underline" style={{ color: '#3CB371' }}>
+                Sign in
+              </span>
+            </Link>
+            
           </p>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from "../context/AuthContext";
-
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
 
@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-//   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -123,26 +122,7 @@ export default function LoginPage() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center cursor-pointer">
-                {/* <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded cursor-pointer"
-                  style={{ 
-                    accentColor: '#3CB371'
-                  }}
-                />
-                <span className="ml-2 text-sm" style={{ color: '#263238' }}>
-                  Remember me
-                </span> */}
               </label>
-              {/* <a 
-                href="#" 
-                className="text-sm font-medium hover:underline"
-                style={{ color: '#59438E' }}
-              >
-                Forgot password?
-              </a> */}
             </div>
 
             <button
@@ -153,6 +133,19 @@ export default function LoginPage() {
               Sign In
             </button>
           </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm" style={{ color: '#263238', opacity: 0.6 }}>
+            Don't have an account?{' '}
+            <Link 
+              to="/register" 
+              className="font-medium hover:underline"
+              style={{ color: '#59438E' }}
+            >
+              Sign up
+            </Link>
+          </p>
         </div>
 
         <div className="mt-8 text-center text-xs" style={{ color: '#263238', opacity: 0.5 }}>
