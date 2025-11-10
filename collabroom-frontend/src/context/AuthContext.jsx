@@ -13,6 +13,11 @@ export function AuthProvider({ children }) {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/protected`, {
           credentials: "include",
         });
+        if(!res.ok)
+        {
+          const data = await res.json();
+          console.log(data);
+        }
         if (res.ok) {
           const data = await res.json();
           console.log(data);
