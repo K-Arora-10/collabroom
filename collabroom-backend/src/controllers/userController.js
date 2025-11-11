@@ -36,11 +36,13 @@ export const registerUser = async (req, res) => {
     //   html
     // });
 
+
     await sendEmail({
-      to: "krishmaur10@gmail.com",
+      to: email,
       subject: "Verify your email - CollabRoom",
       html,
-    });
+  });
+
 
 
 

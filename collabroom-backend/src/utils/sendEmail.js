@@ -1,28 +1,23 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+import Brevo from "@getbrevo/brevo";
 
 export const sendEmail = async (options) => {
-    const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: "collabroom.team@gmail.com",
-        pass: "bskX9DWZIJUGzjT",
+  try {
+    const client = new Brevo.TransactionalEmailsApi();
+    client.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
+
+    const emailData = {
+      sender: { 
+        email: process.env.SENDER_EMAIL, 
+        name: "CollabRoom"
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+      to: [{ email: options.to }],
+      subject: options.subject,
+      htmlContent: options.html
+    };
 
-
-  const mailOptions = {
-    from: `"CollabRoom" <${process.env.EMAIL}>`,
-    to: options.to,
-    subject: options.subject,
-    html: options.html,
-  };
-
-  await transporter.sendMail(mailOptions);
+    const response = await client.sendTransacEmail(emailData);
+    console.log("Email sent:", response);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 };
-
