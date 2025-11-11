@@ -8,7 +8,7 @@ export const sendEmail = async (options) => {
       secure: false,
       auth: {
         user: "9b47e2001@smtp-brevo.com",
-        pass: "vCFhW0SpIJGx1A4w",
+        pass: "bskX9DWZIJUGzjT",
       },
       tls: {
         rejectUnauthorized: false,
