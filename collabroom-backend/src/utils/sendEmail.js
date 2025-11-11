@@ -7,7 +7,7 @@ export const sendEmail = async (options) => {
       port: 587,
       secure: false,
       auth: {
-        user: "9b47e2001@smtp-brevo.com",
+        user: "collabroom.team@gmail.com",
         pass: "bskX9DWZIJUGzjT",
       },
       tls: {
