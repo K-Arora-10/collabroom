@@ -3,12 +3,12 @@ import dotenv from "dotenv";
 
 export const sendEmail = async (options) => {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp-relay.brevo.com",
       port: 587,
       secure: false,
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.APP_PASS,
+        user: "9b47e2001@smtp-brevo.com",
+        pass: "vCFhW0SpIJGx1A4w",
       },
       tls: {
         rejectUnauthorized: false,

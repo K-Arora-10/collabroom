@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import {sendEmail} from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
+// import { Resend } from 'resend';
 
 
 export const registerUser = async (req, res) => {
@@ -25,13 +26,23 @@ export const registerUser = async (req, res) => {
       <p>This link will expire in 1 hour.</p>
     `;
 
+    // const resend = new Resend(process.env.RESEND_API_KEY);
     console.log("Sending verification email to:", email);
 
+    // await resend.emails.send({
+    //   from: 'collabroom.team@gmail.com',
+    //   to: email,
+    //   subject: 'Verify your email - CollabRoom',
+    //   html
+    // });
+
     await sendEmail({
-      to: email,
+      to: "krishmaur10@gmail.com",
       subject: "Verify your email - CollabRoom",
       html,
     });
+
+
 
     res.status(200).json({ message: "Verification email sent to " + email });
   } catch (error) {
