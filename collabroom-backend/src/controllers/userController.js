@@ -18,7 +18,7 @@ export const registerUser = async (req, res) => {
     await user.save();
 
     const verify = `${process.env.FRONTEND_URL}/verify/${token}`;
-    const html = (name, verify) => `
+    const html = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -33,9 +33,7 @@ export const registerUser = async (req, res) => {
             <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
               <tr>
                 <td style="background-color: #000000; padding: 40px 40px 30px 40px; text-align: center;">
-                  <div style="background-color: #000000; display: inline-block; padding: 0;">
-                    <h1 style="color: #ffffff; font-size: 42px; font-weight: 700; margin: 0; letter-spacing: 2px; text-transform: uppercase;">COLLAB</h1>
-                  </div>
+                  <h1 style="color: #ffffff; font-size: 48px; font-weight: 900; margin: 0; letter-spacing: 0px; text-transform: uppercase; font-family: 'Impact', 'Arial Black', sans-serif;">COLLAB</h1>
                 </td>
               </tr>
               <tr>
