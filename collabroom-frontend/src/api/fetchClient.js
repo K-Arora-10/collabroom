@@ -1,12 +1,10 @@
 const API_URL = import.meta.env.VITE_BACKEND_URL
 
 async function refreshAccessToken() {
-  const res = await fetch(`${API_URL}/api/users/refresh`, {
+  await fetch(`${API_URL}/api/users/refresh`, {
     method: "POST",
     credentials: "include",
   });
-  if (!res.ok) throw new Error("Failed to refresh token");
-  return res.json();
 }
 
 export async function fetchWithAuth(url, options = {}) {

@@ -151,6 +151,7 @@ const generateRefreshToken = (user) =>
 
 
 export const refreshToken = async (req, res) => {
+  console.log("Refresh token requested");
   const refreshToken = req.cookies.refresh_token;
   if (!refreshToken)
     return res.status(401).json({ message: "No refresh token" });
@@ -162,6 +163,7 @@ export const refreshToken = async (req, res) => {
       return res.status(403).json({ message: "Invalid refresh token" });
 
     const newAccessToken = generateAccessToken(user);
+    console.log("New access token generated");
 
     res.cookie("access_token", newAccessToken, {
       httpOnly: true,
