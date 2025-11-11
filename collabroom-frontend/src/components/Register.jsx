@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { set } from 'mongoose';
 
 
 export default function RegisterPage() {
@@ -68,7 +69,9 @@ export default function RegisterPage() {
       setPasswordMatch(true);
       setShowPassword(false);
       setShowConfirmPassword(false);
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 3100);
     } catch (err) {
       console.error(err);
       toast.error('Error connecting to server. Please try again later.');
