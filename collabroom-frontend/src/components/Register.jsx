@@ -3,9 +3,11 @@ import { Eye, EyeOff, Check } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 
 export default function RegisterPage() {
+  const navigate = Navigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -66,6 +68,7 @@ export default function RegisterPage() {
       setPasswordMatch(true);
       setShowPassword(false);
       setShowConfirmPassword(false);
+      navigate('/login');
     } catch (err) {
       console.error(err);
       toast.error('Error connecting to server. Please try again later.');
