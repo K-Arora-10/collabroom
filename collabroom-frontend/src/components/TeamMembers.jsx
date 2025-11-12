@@ -79,7 +79,7 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
                       <Crown className="w-4 h-4 flex-shrink-0" style={{ color: '#D39B4B' }} />
                     )}
                     {member.email === leader.email && (
-                      " (Leader)"
+                      <div className="pl-2">(Leader)</div>
                     )}
                   </div>
                   <p className="text-sm truncate" style={{ color: '#263238', opacity: 0.6 }}>
