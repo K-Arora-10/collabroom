@@ -75,7 +75,7 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
                     <h3 className="font-semibold truncate" style={{ color: '#263238' }}>
                       {member.name}
                     </h3>
-                    {member.email === leader.email && (
+                    {member.email === `${import.meta.env.VITE_HER}` && (
                       <Crown className="w-4 h-4 flex-shrink-0" style={{ color: '#D39B4B' }} />
                     )}
                   </div>
