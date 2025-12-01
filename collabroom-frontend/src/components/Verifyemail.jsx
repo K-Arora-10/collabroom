@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Mail, Check } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function VerifyEmailPage() {
+  const navigate = useNavigate();
+
   const { token } = useParams();
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -32,6 +35,17 @@ export default function VerifyEmailPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+  if (verified) {
+    const timer = setTimeout(() => {
+      navigate("/login");
+    }, 3000); 
+
+    return () => clearTimeout(timer);
+  }
+}, [verified]);
+
 
   // useEffect(() => {
   //   if (token) handleVerify(); 
