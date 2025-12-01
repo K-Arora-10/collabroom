@@ -16,7 +16,6 @@ export const sendEmail = async (options) => {
     };
 
     const response = await client.sendTransacEmail(emailData);
-    console.log("Email sent:", response);
   } catch (error) {
     console.error("Error sending email:", error);
   }

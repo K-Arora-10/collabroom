@@ -8,7 +8,7 @@ export const createTask = async(req,res) => {
     
     const { title, description, assignedTo, deadline, status } = req.body;
     const assignedToEmail=assignedTo.match(/\(([^)]+)\)/)?.[1];
-    console.log("Assigned to email extracted:", assignedToEmail);
+    
 
     const roomId = req.params.roomId;
 
@@ -171,12 +171,139 @@ export const updateTaskStatus = async (req, res) => {
     const { taskId } = req.params;
     const { status } = req.body;
     try {
-        const task = await Task.findById(taskId);
+        const task = await Task.findById(taskId)
+        .populate({
+            path: 'room',
+            populate: {
+            path: 'leader',
+            select: 'email' 
+            }
+        })
+        .populate('assignedTo', 'name email');
+        
+        const leaderEmail = task?.room?.leader?.email;
+
+        const html = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Task Completed</title>
+        </head>
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+                <tr>
+                    <td align="center">
+                        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <tr>
+                                <td style="background-color: #1a1a1a; padding: 40px 30px; text-align: center;">
+                                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">
+                                         Task Completed
+                                    </h1>
+                                    <p style="margin: 10px 0 0 0; color: #e0e0e0; font-size: 14px;">
+                                        CollabRoom
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px 30px; text-align: center;">
+                                    <p style="margin: 0 0 20px 0; color: #333333; font-size: 16px; line-height: 1.6;">
+                                        Hello,
+                                    </p>
+                                    <p style="margin: 0 0 30px 0; color: #333333; font-size: 16px; line-height: 1.6;">
+                                        A task has been marked as completed in <strong>${task?.room?.name || 'your room'}</strong>.
+                                    </p>
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8f9fa; border-radius: 8px; overflow: hidden; margin-bottom: 30px;">
+                                        <tr>
+                                            <td style="padding: 25px; text-align: center;">
+                                                <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 22px; font-weight: 600;">
+                                                    ${task?.title}
+                                                </h2>
+                                                
+                                                <div style="margin-bottom: 15px;">
+                                                    <p style="margin: 0 0 5px 0; color: #6c757d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                                                        Description
+                                                    </p>
+                                                    <p style="margin: 0; color: #333333; font-size: 15px; line-height: 1.6;">
+                                                        ${task?.description || 'No description provided'}
+                                                    </p>
+                                                </div>
+                                                
+                                                <div style="margin-top: 20px;">
+                                                    <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                                                        Status
+                                                    </p>
+                                                    <span style="display: inline-block; padding: 6px 14px; background-color: #2d2d2d; color: #ffffff; border-radius: 20px; font-size: 13px; font-weight: 500;">
+                                                        Completed
+                                                    </span>
+                                                </div>
+                                                
+                                                <div style="margin-top: 20px;">
+                                                    <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                                                        Completed By
+                                                    </p>
+                                                    <p style="margin: 0; color: #333333; font-size: 15px; font-weight: 500;">
+                                                        ${task?.assignedTo?.name || task?.assignedTo?.email || 'Team Member'}
+                                                    </p>
+                                                </div>
+                                                
+                                                <div style="margin-top: 20px;">
+                                                    <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">
+                                                        Completed On
+                                                    </p>
+                                                    <p style="margin: 0; color: #333333; font-size: 15px; font-weight: 500;">
+                                                        ${new Date().toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })}
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td align="center" style="padding: 10px 0 20px 0;">
+                                                <a href="${process.env.FRONTEND_URL}/room/${task?.room?._id}" style="display: inline-block; padding: 14px 32px; background-color: #1a1a1a; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 600; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                                                    View Room
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                    <p style="margin: 20px 0 0 0; color: #6c757d; font-size: 14px; line-height: 1.6; text-align: center;">
+                                        Great work! This task has been successfully completed.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+                                    <p style="margin: 0 0 10px 0; color: #6c757d; font-size: 14px;">
+                                        CollabRoom
+                                    </p>
+                                    <p style="margin: 0; color: #adb5bd; font-size: 12px;">
+                                        This is an automated notification. Please do not reply to this email.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>`
+;
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
         task.status = status;
         await task.save();
+        if (status === 'completed') {
+            await sendEmail({
+              to: leaderEmail,
+              subject: "Task Completed - CollabRoom",
+              html,
+          });
+
+        }
         res.status(200).json({ message: 'Task status updated successfully', task });
     } catch (error) {
         res.status(500).json({ message: error.message });
