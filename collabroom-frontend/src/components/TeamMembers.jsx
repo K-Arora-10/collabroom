@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { UserPlus, Copy, Check, Mail, X, Crown, Trash2 } from 'lucide-react';
+import { UserPlus, Copy, Check, Mail, X, Crown, Trash2, Star } from 'lucide-react';
 import { fetchWithAuth } from '../api/fetchClient';
 
 
@@ -78,9 +78,8 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
                     {member.email === `${import.meta.env.VITE_HER}` && (
                       <Crown className="w-4 h-4 flex-shrink-0" style={{ color: '#D39B4B' }} />
                     )}
-                    {member.email === leader.email && (
-                      <div className="pl-2">(Leader)</div>
-                    )}
+                    
+
                   </div>
                   <p className="text-sm truncate" style={{ color: '#263238', opacity: 0.6 }}>
                     {member.email}
@@ -98,15 +97,12 @@ export default function MembersSection({ roomId,isLeaderprop,membersProp, invite
                   </div>
                 </div>
               </div>
-              {isLeader && member.role !== 'Leader' && (
-                <button
-                  onClick={() => handleRemoveMember(member.id)}
-                  className="p-2 rounded-lg hover:bg-red-50 transition-colors ml-2"
-                  title="Remove member"
-                >
-                  <Trash2 className="w-4 h-4" style={{ color: '#ef4444' }} />
-                </button>
-              )}
+              {member.email === leader.email && (
+                      <span className="ml-2 flex items-center gap-1 text-sm text-fuchsia-800 font-semibold">
+                        <Star className="w-4 h-4 fill-fuchsia-800 text-fichsia-800" />
+                        Leader
+                      </span>
+                    )}
             </div>
           </div>
         ))}

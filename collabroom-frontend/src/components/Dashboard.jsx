@@ -149,11 +149,11 @@ export default function Dashboard() {
                   className="p-2 rounded-lg hover:bg-opacity-10 transition-colors relative"
                   style={{ backgroundColor: "#FAFAFA" }}
                 >
-                  <Bell className="w-5 h-5" style={{ color: "#263238" }} />
+                  {/* <Bell className="w-5 h-5" style={{ color: "#263238" }} />
                   <span
                     className="absolute top-1 right-1 w-2 h-2 rounded-full"
                     style={{ backgroundColor: "#3CB371" }}
-                  ></span>
+                  ></span> */}
                 </button>
               </div>
               <div className="flex items-center space-x-3">

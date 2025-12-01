@@ -5,9 +5,11 @@ import TaskSection from './TaskSection';
 import { useParams } from 'react-router-dom';
 import { fetchWithAuth } from '../api/fetchClient';
 import ChatSection from './ChatSection';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function RoomPage() {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('tasks');
   
   const [isLeader, setIsLeader] = useState(false);
@@ -81,7 +83,7 @@ export default function RoomPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <button className="p-2 rounded-lg hover:bg-opacity-10 transition-colors" style={{ backgroundColor: '#FAFAFA' }}>
+              <button onClick={()=>{navigate(-1)}} className="p-2 rounded-lg hover:bg-opacity-10 transition-colors" style={{ backgroundColor: '#FAFAFA' }}>
                 <ArrowLeft className="w-5 h-5" style={{ color: '#263238' }} />
               </button>
               <div>
