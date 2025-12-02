@@ -5,8 +5,10 @@ import { useState } from "react";
 import CreateTaskModal from "./CreateTaskModal";
 import { fetchWithAuth } from "../api/fetchClient";
 import { useEffect } from "react";
+import {useAuth} from "../context/AuthContext.jsx";
 
 const TaskSection = ({ members, roomId, isLeader }) => {
+  const {user}=useAuth();
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
   const [tasks, setTasks] = useState({
     pending: [],
@@ -41,6 +43,7 @@ const TaskSection = ({ members, roomId, isLeader }) => {
     };
     
     useEffect(() => {
+      
       const fetchTasks = async () => {
         try {
           const res = await fetchWithAuth(`/api/tasks/getTasks/${roomId}`, {
@@ -153,7 +156,7 @@ const TaskSection = ({ members, roomId, isLeader }) => {
           {task.assignedTo.name}
         </span>
         
-        {nextStatus && (
+        {nextStatus && (user.user.email===task.assignedTo.email) && (
           <button
             onClick={() => {if(task.status==='completed')return
                 else onStatusChange(task._id, nextStatus)}}
